@@ -1,4 +1,5 @@
 import { useReducer, useEffect } from "react";
+import moment from "moment";
 const dataTes = [
   {
     order_id: "SO-921",
@@ -80,8 +81,8 @@ export default function MergeData() {
   useEffect(() => {
     dispatch({ type: "INIT" });
     function getData() {
-      const MERGE_DATA = purchasedByMonth(USERS.data, POSTS.data);
-      dispatch({ type: "MERGE_SUCCESS", data: MERGE_DATA });
+      const purchased = purchasedByMonth(state.data);
+      dispatch({ type: "MERGE_SUCCESS", data: purchased });
     }
     getData();
   }, []);
@@ -93,23 +94,23 @@ export default function MergeData() {
   if (!state.isError && !state.isLoading) {
     return (
       <React.Fragment>
-        <h4>Hasil Nomor 2</h4>
+        <h4>Hasil Nomor 5.1</h4>
         <span>{JSON.stringify(state.data)}</span>
       </React.Fragment>
     );
   } else return <span>Loading...</span>;
 }
 
-function purchasedByMonth(MONTH, YEAR) {
+function purchasedByMonth(purchased) {
   const temp = [];
-  USERS.map(user => {
-    POSTS.map(post => {
-      user.id === post.userId ? temp.push({ ...post, user: user }) : null;
-    });
+  purchased.forEach(item => {
+    if (
+      moment(item.created_at).year() === 2018 &&
+      moment(item.created_at).month() === 2
+    ) {
+      temp.push(item);
+    }
   });
-
-  console.log(temp);
+  // console.log(temp);
   return temp;
 }
-
-

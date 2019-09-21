@@ -40,9 +40,9 @@ export default function MergeData() {
     getData();
   }, []);
 
-  useEffect(() => {
-    console.log(state);
-  }, [state]);
+  // useEffect(() => {
+  //   console.log(state);
+  // }, [state]);
 
   if (!state.isError && !state.isLoading) {
     return (
@@ -62,6 +62,6 @@ function reformData(USERS, POSTS) {
     });
   });
 
-  console.log(temp);
+  // console.log(temp);
   return temp;
 }
