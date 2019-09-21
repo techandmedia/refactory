@@ -122,6 +122,10 @@ function purchasedByMonth(purchased) {
 
 function findAri(data) {
   let temp = data.filter(item => item.customer.name === "Ari");
-  // console.log(temp);
-  return temp;
+  let price = [];
+  temp.map(item => item.items.forEach(el => price.push(el.price)));
+
+  const addReducer = (acc, currentValue) => acc + currentValue;
+  let finalPrice = price.reduce(addReducer);
+  return finalPrice;
 }
