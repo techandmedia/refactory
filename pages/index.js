@@ -3,11 +3,26 @@ import { Row, Col, Radio } from "antd";
 import Dua from "../jawaban/Dua";
 import Lima from "../jawaban/Lima";
 
+const text = `
+async function readDir(value){
+  // do something with value
+  return await valueChanged
+}
+`;
+
 function hasilReducer(state, action) {
   const { type } = action;
   switch (type) {
     case 1:
-      return { value: 1, component: <h1>Belum ada Hasil</h1> };
+      return {
+        value: 1,
+        component: (
+          <React.Fragment>
+            <p>Hasil 1</p>
+            <span>{text}</span>
+          </React.Fragment>
+        )
+      };
     case 2:
       return {
         value: 2,
@@ -47,7 +62,12 @@ function hasilReducer(state, action) {
 export default function App() {
   const [state, dispatch] = useReducer(hasilReducer, {
     value: 1,
-    component: <h1>Belum ada Hasil</h1>
+    component: (
+      <React.Fragment>
+        <p>Hasil 1</p>
+        <span>{text}</span>
+      </React.Fragment>
+    )
   });
 
   function handleChange(e) {
