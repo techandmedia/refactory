@@ -54,7 +54,7 @@ const dataTes = [
 ];
 
 function reducer(state, action) {
-  const { type, data } = action;
+  const { type, purchased, foundAri } = action;
   switch (type) {
     case "INIT":
       return {
@@ -64,7 +64,8 @@ function reducer(state, action) {
       return {
         isLoading: false,
         isError: false,
-        data
+        purchased,
+        foundAri
       };
     default:
       break;
@@ -82,7 +83,8 @@ export default function MergeData() {
     dispatch({ type: "INIT" });
     function getData() {
       const purchased = purchasedByMonth(state.data);
-      dispatch({ type: "MERGE_SUCCESS", data: purchased });
+      const foundAri = findAri(state.data);
+      dispatch({ type: "MERGE_SUCCESS", purchased, foundAri });
     }
     getData();
   }, []);
@@ -95,7 +97,10 @@ export default function MergeData() {
     return (
       <React.Fragment>
         <h4>Hasil Nomor 5.1</h4>
-        <span>{JSON.stringify(state.data)}</span>
+        <p>{JSON.stringify(state.purchased)}</p>
+
+        <h4>Hasil Nomor 5.2</h4>
+        <p>{JSON.stringify(state.foundAri)}</p>
       </React.Fragment>
     );
   } else return <span>Loading...</span>;
@@ -111,6 +116,12 @@ function purchasedByMonth(purchased) {
       temp.push(item);
     }
   });
+  // console.log(temp);
+  return temp;
+}
+
+function findAri(data) {
+  let temp = data.filter(item => item.customer.name === "Ari");
   // console.log(temp);
   return temp;
 }
