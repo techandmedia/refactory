@@ -54,7 +54,7 @@ const dataTes = [
 ];
 
 function reducer(state, action) {
-  const { type, purchased, foundAri } = action;
+  const { type, purchased, foundAri, findTotal } = action;
   switch (type) {
     case "INIT":
       return {
@@ -65,7 +65,8 @@ function reducer(state, action) {
         isLoading: false,
         isError: false,
         purchased,
-        foundAri
+        foundAri,
+        findTotal
       };
     default:
       break;
@@ -84,7 +85,8 @@ export default function MergeData() {
     function getData() {
       const purchased = purchasedByMonth(state.data);
       const foundAri = findAri(state.data);
-      dispatch({ type: "MERGE_SUCCESS", purchased, foundAri });
+      const findTotal = findTotalForEachPerson(state.data);
+      dispatch({ type: "MERGE_SUCCESS", purchased, foundAri, findTotal });
     }
     getData();
   }, []);
@@ -101,6 +103,9 @@ export default function MergeData() {
 
         <h4>Hasil Nomor 5.2</h4>
         <p>{JSON.stringify(state.foundAri)}</p>
+
+        <h4>Hasil Nomor 5.3</h4>
+        <p>{JSON.stringify(state.findTotal)}</p>
       </React.Fragment>
     );
   } else return <span>Loading...</span>;
@@ -128,4 +133,38 @@ function findAri(data) {
   const addReducer = (acc, currentValue) => acc + currentValue;
   let finalPrice = price.reduce(addReducer);
   return finalPrice;
+}
+
+function findTotalForEachPerson(data) {
+  let tempPrice = [];
+  let tempData = [];
+  const addReducer = (acc, currentValue) => acc + currentValue;
+  data.map(item =>
+    item.items.forEach(el => {
+      tempPrice.push(el.price);
+      let finalPrice = tempPrice.reduce(addReducer);
+      if (finalPrice < 300000) {
+        console.log("OK");
+        tempData.push(item);
+      }
+    })
+  );
+
+  let name = "";
+  let noDuplicateArray = [];
+  tempData.map(item => {
+    name = item.customer.name;
+    if (noDuplicateArray.length === 0) {
+      noDuplicateArray.push(item);
+    }
+    noDuplicateArray.forEach(el => {
+      if (el.customer.name !== name) {
+        noDuplicateArray.push(item);
+      }
+    });
+    name = "";
+  });
+  // console.log(noDuplicateArray);
+
+  return noDuplicateArray;
 }
